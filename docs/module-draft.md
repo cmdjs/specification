@@ -6,6 +6,7 @@ This specification addresses how modules should be written. The modules are desi
 
 - Modules are singletons.
 - Execution must be lazy.
+- New free variables within the module scope should not be introduced.
 - Modules may have cyclic dependencies.
 
 
