@@ -1,143 +1,175 @@
-# Modules / draft
+# Common Module Definition / draft
 
 ------
 
-This specification addresses how modules should be written. The modules are designed for **browser-based** environment:
+This specification addresses how modules should be written in order to be interoperable in **browser-based** environment. By implication, this specification defines the minimum features that a module system must provide in order to support interoperable modules.
 
 - Modules are singletons.
-- Execution must be lazy.
 - New free variables within the module scope should not be introduced.
-- Modules may have cyclic dependencies.
+- Execution must be lazy.
+- With some care, modules may have cyclic dependencies.
 
 
-## Define
 
-A module is defined with `define` keyword, `define` is a Function, it accepts a function, object, array, and string as the factory.
+## Module Definition
 
-- **none-function** factory, the exported API is the data of the factory.
-- functional factory must only contain three parameters, which are `require`, `exports` and `module`, the exported API is the data on `exports`.
+A module is defined with `define` keyword, which is a function.
 
+```js
+define(factory);
+```
 
-Guarantees should be made by module writers:
+1. The `define` function accepts a single argument, the module factory.
+1. The module factory may be a function or other valid values.
+1. If the module factory is a function, then the function must only contain three parameters, which are `require`, `exports` and `module`.
+1. If the module factory is not a function, then the module's exports are set to that object.
 
-1. A module must be encoded in UTF-8.
-2. Take care of the global leaks.
-
-
-## Require
-
-1. `require` is a Function
-
-    1. The `require` function accepts a module identifier.
-    2. The module identifier must be a pure string.
-    3. `require` returns the exported API of the foreign module.
-    4. If requested module cannot be returned, `require` should return null.
-
-2. `require.async` is a Function
-
-    1. The `require.async` function accepts a list of module identifiers and a callback.
-    2. The module identifier can be a variable that refers to a pure string.
-    3. Callback accepts the number of parameters according to the module identifiers.
-    4. If requested module cannot be returned, `require` should return null.
-
-3. `require.resolve` is a function, it accepts a module identifier and return the absolute path of the module.
-
-4. `require.style` is a Function (*Optional*)
-
-    1. The `require.style` accepts string or a variable that refers to a string.
-    2. The parameter should be valid css.
-    3. `require.style` should render the css.
 
 
 ## Module Context
 
-In a module, it has two variables that related to this module:
+In a module, there are three free variables.
 
-- The `module` object is the module itself, it contains the information of the module
-- The `exports` object is the exported API of the module.
+```js
+define(function(require, exports, module) {
 
-### Required Interface
+  // The module code goes here
 
-1. `module.id`
+});
+```
 
-    The identifier for the module. It may be the uri of the module.
+- The `require` is a function that gets the exported API of the foreign module.
+- The `exports` is an object that the module may add its API to as it executes..
+- The `module` is an object that contains the metadata of the module.
 
-2. `module.uri`
+
+### The `require` Function
+
+1. `require` is a function
+
+    1. The `require` function accepts a module identifier.
+    1. `require` returns the exported API of the foreign module.
+    1. If requested module cannot be returned, `require` should return null.
+
+1. `require.async` is a function
+
+    1. The `require.async` function accepts a list of module identifiers and a optional callback.
+    1. The callback function receives module exports as function arguments, listed in the same order as the order in the first argument.
+    1. If requested module cannot be returned, the callback should receive null.
+
+1. `require.resolve` is a function (*Optional*)
+
+    1. The `resolve` function accepts a module identifier.
+    1. The `resolve` function returns the absolute path of the module.
+
+1. `require.style` is a function (*Optional*)
+
+    1. The `style` function accepts string.
+    1. The string parameter should be valid CSS text.
+    1. The `style` function should render the CSS text.
+
+
+### The `exports` Object
+
+In a module, there is a free variable called "exports", that is an object that the module may add its API to as it executes. Modules must use the "exports" object as the only means of exporting.
+
+
+### The `module` Object
+
+1. `module.uri`
 
     The full resolved url to the module.
 
-3. `module.dependencies`
+1. `module.dependencies`
 
     A list of identifiers that required by this module.
 
-4. `module.exports`
+1. `module.exports`
 
     The exported API of this module.
 
-### Optional Interface
+1. `module.id`  (*Optional*)
 
-1. `module.parent`
+    The identifier for the module. It may be the uri of the module.
+
+1. `module.parent`  (*Optional*)
 
     The module that required this one.
 
-2. `module.status`
+4. `module.require`  (*Optional*)
 
-    An object of the available loading status. It is defined by the loader itself.
+    The module.require method provides a way to load a module as if require() was called from the original module.
 
-3. `module.factory`
-
-    The factory object of the module.
-
-4. `module.require`
-
-    Just like `require`.
 
 
 ## Module Identifier
 
-1. A module identifier is and must be a string.
+1. A module identifier is and must be a **literal** string.
 2. Module identifiers may not have a filename extensions like `.js`.
 3. Module identifiers should be dash-joined string, such as `foo-bar`.
 4. Module identifiers can be a relative path, like `./foo` and `../bar`.
 
 
+
 ## Sample Code
 
-**A functional module**:
 
-```javascript
-// hello.js
+**A typical sample**
+
+math.js
+```js
 define(function(require, exports, module) {
-    module.exports = 'hello'
-})
-
-// world.js
-define(function(require, exports, module) {
-    var hello = require('./hello')
-
-    var speaker = require('speaker')
-
-    exports.speak = function(name) {
-        name = name || 'world'
-        return speaker.speak(name)
+  exports.add = function() {
+    var sum = 0, i = 0, args = arguments, l = args.length;
+    while (i < l) {
+      sum += args[i++];
     }
-})
+    return sum;
+  };
+});
 ```
 
-**A data module**:
+increment.js
+```js
+define(function(require, exports, module) {
+  var add = require('math').add;
+  exports.increment = function(val) {
+    return add(val, 1);
+  };
+});
+```
 
-```javascript
+program.js
+```js
+define(function(require, exports, module) {
+  var inc = require('increment').increment;
+  var a = 1;
+  inc(a); // 2
+
+  module.id == "program";
+});
+```
+
+
+**Wrapped modules with non-function factory**
+
+object-data.js
+```js
 // object-data.js
 define({
     foo: "bar"
 });
+```
 
-// array-data.js
+array-data.js
+```js
 define([
     'foo',
     'bar'
 ]);
+```
 
-// string-data.js
+string-data.js
+```
 define('foo bar');
 ```
