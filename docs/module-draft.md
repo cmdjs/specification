@@ -4,18 +4,16 @@
 
 This specification addresses how modules should be written. The modules are designed for **browser-based** environment:
 
-- Modules are singletons
-- Modules have an implicitly isolated lexical scope.
+- Modules are singletons.
 - Execution must be lazy.
 - Modules may have cyclic dependencies.
-
 
 
 ## Define
 
 A module is defined with `define` keyword, `define` is a Function, it accepts a function, object, array, and string as the factory.
 
-- **none-function* factory, the exported API is the data of the factory.
+- **none-function** factory, the exported API is the data of the factory.
 - functional factory must only contain three parameters, which are `require`, `exports` and `module`, the exported API is the data on `exports`.
 
 
