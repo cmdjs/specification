@@ -20,15 +20,15 @@ define(factory);
 ```
 
 1. The `define` function accepts a single argument, the module factory.
-1. The module factory may be a function or other valid values.
-1. If the module factory is a function, then the function must only contain three parameters, which are `require`, `exports` and `module`.
-1. If the module factory is not a function, then the module's exports are set to that object.
+1. The `factory` may be a function or other valid values.
+1. If `factory` is a function, the first three parameters of the function, if specified, must be "require", "exports", and "module", in that order.
+1. If `factory` is not a function, then the module's exports are set to that object.
 
 
 
 ## Module Context
 
-In a module, there are three free variables.
+In a module, there are three free variables: `require`, `exports` and `module`.
 
 ```js
 define(function(require, exports, module) {
@@ -38,55 +38,51 @@ define(function(require, exports, module) {
 });
 ```
 
-- The `require` is a function that gets the exported API of the foreign module.
-- The `exports` is an object that the module may add its API to as it executes..
-- The `module` is an object that contains the metadata of the module.
-
 
 ### The `require` Function
 
 1. `require` is a function
 
-    1. The `require` function accepts a module identifier.
+    1. `require` accepts a module identifier.
     1. `require` returns the exported API of the foreign module.
     1. If requested module cannot be returned, `require` should return null.
 
 1. `require.async` is a function
 
-    1. The `require.async` function accepts a list of module identifiers and a optional callback.
+    1. `require.async` accepts a list of module identifiers and a optional callback function.
     1. The callback function receives module exports as function arguments, listed in the same order as the order in the first argument.
-    1. If requested module cannot be returned, the callback should receive null.
+    1. If requested module cannot be returned, the callback should receive null correspondingly.
 
 1. `require.resolve` is a function (*Optional*)
 
-    1. The `resolve` function accepts a module identifier.
-    1. The `resolve` function returns the absolute path of the module.
+    1. `require.resolve` accepts a module identifier.
+    1. `require.resolve` returns the absolute path of the module.
 
 1. `require.style` is a function (*Optional*)
 
-    1. The `style` function accepts string.
+    1. `require.style` accepts a string.
     1. The string parameter should be valid CSS text.
-    1. The `style` function should render the CSS text.
+    1. `require.style` should render the CSS text.
 
 
 ### The `exports` Object
 
-In a module, there is a free variable called "exports", that is an object that the module may add its API to as it executes. Modules must use the "exports" object as the only means of exporting.
+In a module, there is a free variable called "exports", that is an object that the module may add its API to as it executes.
 
 
 ### The `module` Object
 
 1. `module.uri`
 
-    The full resolved url to the module.
+    The full resolved uri to the module.
 
 1. `module.dependencies`
 
-    A list of identifiers that required by this module.
+    A list of module identifiers that required by the module.
 
 1. `module.exports`
 
-    The exported API of this module.
+    The exported API of the module. It is the same as `exports` object.
 
 1. `module.id`  (*Optional*)
 
@@ -98,7 +94,7 @@ In a module, there is a free variable called "exports", that is an object that t
 
 4. `module.require`  (*Optional*)
 
-    The module.require method provides a way to load a module as if require() was called from the original module.
+    The `module.require` method provides a way to load a module as if `require()` was called from the original module.
 
 
 
