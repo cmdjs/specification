@@ -1,6 +1,6 @@
 # Common Module
 
-Specifications on common module.
+Specifications about common module.
 
 
 ## Thanks
