@@ -58,12 +58,6 @@ define(function(require, exports, module) {
     1. `require.resolve` accepts a module identifier.
     1. `require.resolve` returns the absolute path of the module.
 
-1. `require.style` is a function (*Optional*)
-
-    1. `require.style` accepts a string.
-    1. The string parameter should be valid CSS text.
-    1. `require.style` should render the CSS text.
-
 
 ### The `exports` Object
 
@@ -83,18 +77,6 @@ In a module, there is a free variable called "exports", that is an object that t
 1. `module.exports`
 
     The exported API of the module. It is the same as `exports` object.
-
-1. `module.id`  (*Optional*)
-
-    The identifier for the module. It may be the uri of the module.
-
-1. `module.parent`  (*Optional*)
-
-    The module that required this one.
-
-4. `module.require`  (*Optional*)
-
-    The `module.require` method provides a way to load a module as if `require()` was called from the original module.
 
 
 
@@ -151,7 +133,6 @@ define(function(require, exports, module) {
 
 object-data.js
 ```js
-// object-data.js
 define({
     foo: "bar"
 });
