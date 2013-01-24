@@ -17,8 +17,15 @@ Each package must provide a top-level package descriptor, "package.json".
 
 ### Optional Fields
 
+- description
+- keywords
+- author
+- repository
+- bugs
+- license
+- scripts
 
-## Package Distribution
+## Extendable Fields
 
 
 ## Sample Code
@@ -31,6 +38,7 @@ Each package must provide a top-level package descriptor, "package.json".
     "name": "overlay",
     "version": "1.0.0",
     "description": "Overlay is a mask covering.",
+    "keywords": ["mask", "dom"],
     "author": "Hsiaoming Yang <lepture@me.com>",
     "repository": {
         "type": "git",
@@ -39,13 +47,23 @@ Each package must provide a top-level package descriptor, "package.json".
     "bugs": {
         "url": "https://github.com/arale/overlay/issues"
     },
-    "dependencies": {
-        "arale/widget": "1.0.x",
-        "arale/position": "1.0.0",
-        "arale/iframe-shim": ">=1.0.0"
+    "license": {
+        "type": "BSD",
+        "url": "http://opensource.org/licenses/BSD-2-Clause"
     },
-    "engines": {
-        "seajs": ">2.0.0"
+    "scripts": {
+        "prebuild": "prebuild.js",
+        "test": "make test"
     }
+}
+```
+
+**A mininal sample**
+
+```
+{
+    "root": "arale",
+    "name": "overlay",
+    "version": "1.0.0"
 }
 ```
