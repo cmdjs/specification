@@ -10,7 +10,7 @@ Each package must provide a top-level package descriptor, "package.json".
 
 ### Required Fields
 
-- root
+- family
 - name
 - version
 
@@ -34,7 +34,7 @@ Each package must provide a top-level package descriptor, "package.json".
 
 ```
 {
-    "root": "arale",
+    "family": "arale",
     "name": "overlay",
     "version": "1.0.0",
     "description": "Overlay is a mask covering.",
@@ -62,7 +62,7 @@ Each package must provide a top-level package descriptor, "package.json".
 
 ```
 {
-    "root": "arale",
+    "family": "arale",
     "name": "overlay",
     "version": "1.0.0"
 }
