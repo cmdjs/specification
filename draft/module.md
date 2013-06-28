@@ -7,7 +7,6 @@ This specification addresses how modules should be written in order to be intero
 - Modules are singletons.
 - New free variables within the module scope should not be introduced.
 - Execution must be lazy.
-- With some care, modules may have cyclic dependencies.
 
 
 
@@ -53,10 +52,6 @@ define(function(require, exports, module) {
     1. The callback function receives module exports as function arguments, listed in the same order as the order in the first argument.
     1. If requested module cannot be returned, the callback should receive null correspondingly.
 
-1. `require.resolve` is a function (*Optional*)
-
-    1. `require.resolve` accepts a module identifier.
-    1. `require.resolve` returns the absolute path of the module.
 
 
 ### The `exports` Object
